@@ -8,13 +8,7 @@ which runs on a 360 pixel Screen made out of beer crates.
 ## Idea
 
 The idea is to creat a bare bones, vertical version of the arcade game Space Invaders.
-This will include:
-    - Player Movement
-    - Player Shooting
-    - Enemy Spawning 
-    - Enemy Movement 
-    - Enemy Shooting 
-    - Score System 
-    - Collisions 
+This will include: Player Movement, Shooting, Enemy Spawning, Movement, Shooting, Score System, Collisions.
+ 
 These Tasks will be equally distributed between the 4 members
  
