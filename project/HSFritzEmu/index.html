@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HSML</title>
+  <script>
+    var dimx = 30;
+    var dimy = 12;
+    function renderSockAddr(arr) {
+      if(arr[0] == 0) {//inet
+        return arr[6].toString() + '.' + arr[5].toString() + '.' + arr[4].toString() + '.' + arr[3].toString() + ':' + ((arr[1] << 8) + (arr[2] << 0)).toString();
+      } else if(arr[0] == 1) {//inet6
+        return 'inet6';
+      }
+      return 'decoding error';
+    }
+    function splitSockAddrs(arr) {
+      var res = new Array();
+      while(arr.length != 0) {
+        if(arr[0] == 0) {
+          res.push(arr.slice(0, 7));
+          arr = arr.slice(7);
+        } else if(arr[0] == 1) {
+          res.push(arr.slice(0,27));
+          arr = arr.slice(27);
+        } else {
+          break;
+        }
+      }
+      return res;
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+      var canvas = document.createElement("canvas");
+      canvas.setAttribute("height", dimy);
+      canvas.setAttribute("width", dimx);
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+      canvas.style.border = "1px solid #000000";
+      document.body.appendChild(canvas);
+      document.body.appendChild(document.createTextNode("Available streams:"));
+      var ul = document.createElement("ul");
+      document.body.appendChild(ul);
+
+      var cdata = canvas.getContext("2d");
+      var imgData = cdata.createImageData(dimx,dimy);
+
+      var connection = new WebSocket(((window.location.protocol === "https:") ? "wss://" : "ws://") + window.location.host);
+      connection.binaryType = 'arraybuffer';
+      connection.onerror = function (error) {
+        console.log('WSError: ' + error);
+      };
+      connection.onmessage = function(msg) {
+        var data = new Uint8Array(msg.data);
+        if(data[0] == 1) {
+          var update = data.slice(1);
+          console.log('WSMCUpdate received');
+          var addrs = splitSockAddrs(update);
+          var i, n;
+          while(ul.firstChild){
+            ul.removeChild(ul.firstChild);
+          }
+          for(i = 0; i < addrs.length; i++) {
+            (function () { //hate this. JS sucks hard
+              var li = document.createElement("li");
+              var str = renderSockAddr(addrs[i]);
+              var text = document.createTextNode(str);
+              var data = addrs[i];
+              li.appendChild(text);
+              li.onclick = function(event) {
+                console.log('requesting ' + str);
+                connection.send(data);
+              }
+              ul.appendChild(li);
+            })();
+          }
+        } else if(data[0] == 0) {
+          var frame = data.slice(1);
+          console.log('WSMFrame received ' + frame.length / 3 + ' pixels');
+          for (var i = 0; i < frame.length / 3; i += 1) {
+            imgData.data[4 * i + 0]=frame[3 * i + 0];
+            imgData.data[4 * i + 1]=frame[3 * i + 1];
+            imgData.data[4 * i + 2]=frame[3 * i + 2];
+            imgData.data[4 * i + 3]=255;
+          }
+          cdata.putImageData(imgData,0,0);
+        }
+      };
+    });
+  </script>
+</head>
+<body>
+</body>
+</html>

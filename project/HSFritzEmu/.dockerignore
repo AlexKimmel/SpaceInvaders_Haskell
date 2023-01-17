@@ -1,0 +1,10 @@
+# docker files
+.dockerignore
+Dockerfile
+
+# generated files
+.stack-work/
+stack.yaml.lock
+
+# irrelevant for linux build
+win/
