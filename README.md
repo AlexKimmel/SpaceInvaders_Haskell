@@ -10,11 +10,11 @@ which runs on a 360 pixel Screen made out of beer crates.
 The idea is to creat a bare bones, horizontal version of the arcade game Space Invaders.
 This will include: 
 
-Player Movement, Shooting, 
-Enemy Spawning, Movement, Shooting (including different types of Enemys) 
-Score System, life system (player lossing lifes when shoot, touched or enemy escaping) 
-and Collisions between player, enemy and bullets from both
+Player Movement, Shooting, \n
+Enemy Spawning (in waves), Movement, Shooting (including different types of Enemys)\n 
+Score System, life system (player lossing lifes when shoot, touched or enemy escaping) \n
+and Collisions between player, enemy and bullets from both\n
 
- 
+ \n
 These tasks will be equally distributed between the 4 members of the team 
  
