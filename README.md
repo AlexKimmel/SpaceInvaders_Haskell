@@ -12,7 +12,9 @@ This will include:
 
 Player Movement, Shooting, <br />
 Enemy Spawning (in waves), Movement, Shooting (including different types of Enemys) <br />
+
 Score System, life system (player lossing lifes when shoot, touched or enemy escaping) <br />
+
 and Collisions between player, enemy and bullets from both<br />
 
  
